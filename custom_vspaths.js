@@ -34,14 +34,20 @@
 // Run as Administrator and execute "custom_vspaths.js"
 
 var WshShell = WScript.CreateObject("WScript.Shell");
+var objEnv = WshShell.Environment("Volatile");
 var g_strBaseKey = "HKCU\\Software\\Microsoft\\";
 
 // NOTE; Change these as appropriate
-var g_user = "Jerker";
-var g_strMyDocumentsLocation = "F:\\Jerker";
+var g_user = objEnv("USERNAME");
+var g_home = objEnv("HOMEDRIVE") + objEnv("HOMEPATH");  // not used
+var g_strMyDocumentsLocation = WshShell.SpecialFolders("MyDocuments");
 var g_strProjectLocation = "F:\\dev\\Projekt";
 var g_strVisualStudioLocation = "F:\\Users\\VisualStudio";
 var g_strVSMacrosLocation = g_strVisualStudioLocation + "\\VSMacros";
+
+// Note: This will give the following location of VSMacros
+// F:\Users\VisualStudio\VSMacros\8.0\samples.vsmacros
+// F:\Users\VisualStudio\VSMacros\jerker.vsmacros
 
 main();
 WScript.Echo("Visual Studio user paths successfully changed!");
@@ -134,6 +140,7 @@ function RegisterCustomVSPaths(strVSProduct, strVSVer, strVSName, bRegMacros)
     }
     catch (e)
     {
+        WScript.Echo("ERROR: Cannot write to registry.");
         return null;
     }
 
