@@ -55,7 +55,7 @@ WScript.Echo("Now, copy your settings files to the new location");
 
 function main()
 {
- // Find Visual Studio 7.1, 8.0, 9.0 and 10.0
+ 	// Find Visual Studio 7.1, 8.0, 9.0 and 10.0
 	var bVS71 = null;
 	var bVS80 = null;
 	var bVS90 = null;
