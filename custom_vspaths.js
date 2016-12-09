@@ -38,25 +38,48 @@
 
 // Run as Administrator and execute "custom_vspaths.js"
 
+/*
+Comment and background:
+This script was made due to the habit of mine of NOT using the "My Documents"
+directory for development. Instead I have a dedicated drive for these things.
+Being part of Windows installation and a Special folder, "My Documents" are
+usually filled with all sorts of installation folders. It is by me treated as a
+per Windows installation existing folder and I make sure not to store anything
+important I want to keep there. This script is a help on the way to move Visual Studio
+out of My Documents.
+*/
+
 var WshShell = WScript.CreateObject("WScript.Shell");
 var objEnv = WshShell.Environment("Volatile");
 var g_strBaseKey = "HKCU\\Software\\Microsoft\\";
 
-// NOTE; Change these as appropriate
 var g_user = objEnv("USERNAME");
-var g_home = objEnv("HOMEDRIVE") + objEnv("HOMEPATH");  // not used
 var g_strMyDocumentsLocation = WshShell.SpecialFolders("MyDocuments");
-var g_strProjectLocation = "F:\\dev\\Projekt";
-var g_strVisualStudioLocation = "F:\\Users\\VisualStudio";
-var g_strVSMacrosLocation = g_strVisualStudioLocation + "\\VSMacros";
 
-// For me, this will give the following location of VSMacros
+// NOTE; Change these as appropriate
+var g_strProjectLocation = "D:\\dev\\Projekt";              // persistent place for project files, source code etc
+var g_strVisualStudioLocation = "D:\\devapps\\VisualStudio";  // persistent place for user macros, settings, snippets etc
+
+// For me, this will give the following locations for user created things, 
+// also common to and shared by all Visual Studio versions installed.
+// F:\\dev\\Projekt
+// F:\Users\VisualStudio\Settings\vs2005.vssettings
+// F:\Users\VisualStudio\Addins
+// F:\Users\VisualStudio\Code Snippets
+// ... etc
 // F:\Users\VisualStudio\VSMacros\8.0\samples.vsmacros
 // F:\Users\VisualStudio\VSMacros\jerker.vsmacros
 
+// The settinsg files are renamed to vsXXXX..vssettings, where XXXX is the
+// Visual Studio year version. Express versions can be added to the script
+// if needed
+
 main();
 WScript.Echo("Visual Studio user paths successfully changed!");
-WScript.Echo("Now, copy your settings files to the new location");
+WScript.Echo("Now, move your settings files to the new location\nExample: current.vssettings => vs2005.vssettings");
+
+// Visual Studio 2003 - 2013
+// SQL Server Management Studio 2008 - 2014
 
 function main()
 {
@@ -67,6 +90,7 @@ function main()
 	var bVS100 = null;
 	var bVS110 = null;
 	var bVS120 = null;
+	var bVS140 = null;
 	var bVS80X = null;
 	var bVS90X = null;
 	var bVS100X = null;
@@ -86,7 +110,8 @@ function main()
 	try { bVS100 = WshShell.RegRead(g_strBaseKey + "VisualStudio\\10.0\\MyDocumentsLocation"); } catch (e) { bVS100 = null;  }
 	try { bVS110 = WshShell.RegRead(g_strBaseKey + "VisualStudio\\11.0\\MyDocumentsLocation"); } catch (e) { bVS110 = null;  }
 	try { bVS120 = WshShell.RegRead(g_strBaseKey + "VisualStudio\\12.0\\MyDocumentsLocation"); } catch (e) { bVS120 = null;  }
-	try { bVS80X = WshShell.RegRead(g_strBaseKey + "VCExpress\\8.0\\MyDocumentsLocation"); }     catch (e) { bVS80X = null;  }
+	try { bVS140 = WshShell.RegRead(g_strBaseKey + "VisualStudio\\14.0\\MyDocumentsLocation"); } catch (e) { bVS140 = null; }
+	try { bVS80X = WshShell.RegRead(g_strBaseKey + "VCExpress\\8.0\\MyDocumentsLocation"); } 	 catch (e) { bVS80X = null; }
 	try { bVS90X = WshShell.RegRead(g_strBaseKey + "VCExpress\\9.0\\MyDocumentsLocation"); }     catch (e) { bVS90X = null;  }
 	try { bVS100X = WshShell.RegRead(g_strBaseKey + "VCExpress\\10.0\\MyDocumentsLocation"); }   catch (e) { bVS100X = null; }
 	try { bVS110X = WshShell.RegRead(g_strBaseKey + "VCExpress\\11.0\\MyDocumentsLocation"); }   catch (e) { bVS110X = null; }
@@ -107,7 +132,8 @@ function main()
 		if (bVS100) RegisterCustomVSPaths("VisualStudio\\", "10.0", "vs2010", true);
 		if (bVS110) RegisterCustomVSPaths("VisualStudio\\", "11.0", "vs2012", true);
 		if (bVS120) RegisterCustomVSPaths("VisualStudio\\", "12.0", "vs2013", true);
-		if (bVS80X) RegisterCustomVSPaths("VCExpress\\",   "8.0", "vcx2005", false);
+		if (bVS140) RegisterCustomVSPaths("VisualStudio\\", "14.0", "vs2015", true);
+		if (bVS80X) RegisterCustomVSPaths("VCExpress\\", "8.0", "vcx2005", false);
 		if (bVS90X) RegisterCustomVSPaths("VCExpress\\",   "9.0", "vcx2008", false);
 		if (bVS100X) RegisterCustomVSPaths("VCExpress\\", "10.0", "vcx2010", false);
 		if (bVS110X) RegisterCustomVSPaths("VCExpress\\", "11.0", "vcx2012", false);
@@ -133,8 +159,9 @@ function RegisterCustomVSPaths(strVSProduct, strVSVer, strVSName, bRegMacros)
 {
 	// Move Visual Studio paths out of My documents location
 	var strKey = "\\";
-	try
+	try 
 	{
+	    // Projects
 		WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "DefaultNewProjectLocation", g_strProjectLocation, "REG_EXPAND_SZ");
 		WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "DefaultOpenProjectLocation", g_strProjectLocation, "REG_EXPAND_SZ");
 		WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "DefaultOpenSolutionLocation", g_strProjectLocation, "REG_EXPAND_SZ");
@@ -147,18 +174,20 @@ function RegisterCustomVSPaths(strVSProduct, strVSVer, strVSName, bRegMacros)
 		WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "VisualStudioLocation", g_strVisualStudioLocation, "REG_EXPAND_SZ");
 		WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "UserItemTemplatesLocation", g_strVisualStudioLocation + "\\Templates\\ItemTemplates", "REG_EXPAND_SZ");
 		WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "UserProjectTemplatesLocation", g_strVisualStudioLocation + "\\Templates\\ProjectTemplates", "REG_EXPAND_SZ");
- 
+
+		// Settings file "vssettings"
 		strKey = "\\Profile\\";
 
 		if (strVSName != null && strVSName != "")
 			WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "AutoSaveFile", "%vsspv_visualstudio_dir%\\Settings\\" + strVSName + ".vssettings", "REG_EXPAND_SZ");
 
-		strKey = "\\vsmacros\\";
 
+        // Visual Studio macros file
+		strKey = "\\vsmacros\\";
 		if (bRegMacros) 
 		{
-			WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "OtherProjects7\\0\\Path", g_strVSMacrosLocation + "\\" + strVSVer + "\\samples.vsmacros", "REG_SZ");
-			WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "RecordingProject7\\Path", g_strVSMacrosLocation + "\\" + g_user + ".vsmacros", "REG_SZ");
+			WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "OtherProjects7\\0\\Path", g_strVisualStudioLocation + "\\VSMacros\\" + strVSVer + "\\samples.vsmacros", "REG_SZ");
+			WshShell.RegWrite(g_strBaseKey + strVSProduct + strVSVer + strKey + "RecordingProject7\\Path", g_strVisualStudioLocation + "\\VSMacros\\" + g_user + ".vsmacros", "REG_SZ");
 		}
 	}
 	catch (e)
