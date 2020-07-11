@@ -57,7 +57,7 @@ var g_user = objEnv("USERNAME");
 var g_strMyDocumentsLocation = WshShell.SpecialFolders("MyDocuments");
 
 // NOTE; Change these as appropriate
-var g_strProjectLocation = "D:\\dev\\Projekt";              // persistent place for project files, source code etc
+var g_strProjectLocation = "F:\\dev\\Projekt";              // persistent place for project files, source code etc
 var g_strVisualStudioLocation = "D:\\devapps\\VisualStudio";  // persistent place for user macros, settings, snippets etc
 
 // For me, this will give the following locations for user created things, 
@@ -68,7 +68,7 @@ var g_strVisualStudioLocation = "D:\\devapps\\VisualStudio";  // persistent plac
 // F:\Users\VisualStudio\Code Snippets
 // ... etc
 // F:\Users\VisualStudio\VSMacros\8.0\samples.vsmacros
-// F:\Users\VisualStudio\VSMacros\jerker.vsmacros
+// F:\Users\VisualStudio\VSMacros\<user>.vsmacros
 
 // The settinsg files are renamed to vsXXXX..vssettings, where XXXX is the
 // Visual Studio year version. Express versions can be added to the script
