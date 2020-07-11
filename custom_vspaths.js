@@ -1,52 +1,30 @@
 /*******************************************************************************
- Copyright (c) 2006-2014 Jerker Back. All rights reserved.
-
- Permission to use, copy, modify, and distribute this software for any
- purpose with or without fee is hereby granted, provided that the following 
- conditions are met (OSI approved BSD 2-clause license):
-
- 1. Redistributions of source code must retain the above copyright notice, 
-    this list of conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright notice, 
-    this list of conditions and the following disclaimer in the documentation 
-    and/or other materials provided with the distribution.
-
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
- DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE 
- FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
- DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
- CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
- OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
- OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-*******************************************************************************/
-/*******************************************************************************
  custom_vspaths.js - change Visual Studio paths for default location of projects,
                      settings etc.
 
- sometime 2006 originally created by jerker_back
- 
- $LastChangedBy$
+ This file is free for use as public domain by anyone under the terms of
+ Creative Commons Attribution-NonCommercial 4.0 International Public License
+ See the the file license.txt and https://creativecommons.org
 
- https://github.com/jerker-back/VSUtilities
+ originally created by Jerker Back 2006
+ 
+  https://github.com/jerker-back/VSUtilities
 
 ================================================================================
  RcsID = $Id$ */
 
-// Run as Administrator and execute "custom_vspaths.js"
+// HowTo: Run as Administrator and execute "custom_vspaths.js"
 
 /*
 Comment and background:
-This script was made due to the habit of mine of NOT using the "My Documents"
+This script is a help on the way to move Visual Studio out of My Documents.
+It was made due to the habit of mine of NOT using the "My Documents"
 directory for development. Instead I have a dedicated drive for these things.
-Being part of Windows installation and a Special folder, "My Documents" are
+Being part of Windows installation and a "Special folder", "My Documents" are
 usually filled with all sorts of installation folders. It is by me treated as a
 per Windows installation existing folder and I make sure not to store anything
-important I want to keep there. This script is a help on the way to move Visual Studio
-out of My Documents.
+important I want to keep there. 
+
 */
 
 var WshShell = WScript.CreateObject("WScript.Shell");
